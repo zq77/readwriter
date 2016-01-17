@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 这里的名字就是要被读取的文件标示的名字 -->
+<mapper namespace="com.huajtech.model.User">
+	
+	<resultMap type="User" id="userMap">
+		<id column="id" property="id"/>
+		<result column="username" property="username"/>
+		<result column="password" property="password"/>
+	</resultMap>
+	
+	<sql id="select_User">
+		id,username
+	</sql>
+	
+	<!-- 动态查询sql -->
+    <select id="getList" resultType="User" parameterType="map">
+        select <include refid="select_User"/> from user
+        <trim suffixOverrides="and">
+            <where>
+                <if test="id != null"> id = #{id} and</if>
+                <if test="username != null"> username = #{username} and</if>
+                <if test="password != null"> password = #{password} and</if>
+            </where>
+        </trim>
+        order by username DESC
+        <if test="page != null and pageCount != null">
+            limit #{page}, #{pageCount}
+        </if>
+    </select>
+	
+	<!-- 动态修改sql 修改用户，注意用户名不能更改 -->
+	<update id="update" parameterType="User">
+		update user 
+		<trim suffixOverrides=",">
+			<set>
+				<if test="username != null"> username = #{username}, </if>
+				<if test="password != null"> password = #{password}, </if>
+			</set>
+		</trim>
+		 where id = #{id}
+	</update>
+	
+	<!-- 删除sql -->
+	<delete id="delete" parameterType="string">
+		delete from user where id = #{id}
+	</delete>
+	
+	<!-- 增加sql -->
+	<insert id="save" parameterType="User">
+		insert into user(<include refid="select_User"/>, password) values(#{id},#{username},#{password})			
+	</insert>
+</mapper>
