@@ -3,11 +3,8 @@ package com.z.dao;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.stereotype.Service;
-
 import com.z.utils.Page;
 
-@Service
 public interface MyBatisDao {
 
 	public boolean save(String key, Object parameter);

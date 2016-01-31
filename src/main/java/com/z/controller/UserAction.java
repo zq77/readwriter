@@ -23,7 +23,7 @@ public class UserAction {
     @RequestMapping("/list")
 	public String list(HttpServletRequest request) {
         //分页
-        Page page = PageUtil.getPage(0, 2);
+        Page page = PageUtil.getPage(0, 10);
 
         List<User> userList = userService.getList(null, page);
         request.setAttribute("userList", userList);
